@@ -94,7 +94,7 @@ int main(void)
   uint16_t LED1_HalfPeriod = 1000; //0.5Hz
   uint32_t TimeStamp = 0;
   GPIO_PinState SwitchState2[2];
-  int LED2 = 0;
+//  int LED2 = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -107,17 +107,17 @@ int main(void)
 	  //switch press is LOW
 	  SwitchState[0]= HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);
 	  SwitchState2[0]= HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_9);
-	  if(SwitchState2[1]==GPIO_PIN_SET && SwitchState2[0]==GPIO_PIN_RESET)
-	  {
-		  if(LED2 = 0)
-		  {
-			  LED2 = 1;
-		  }
-		  else
-		  {
-			  LED2 = 0;
-		  }
-	  }
+//	  if(SwitchState2[1]==GPIO_PIN_SET && SwitchState2[0]==GPIO_PIN_RESET)
+//	  {
+//		  if(LED2 = 0)
+//		  {
+//			  LED2 = 1;
+//		  }
+//		  else
+//		  {
+//			  LED2 = 0;
+//		  }
+//	  }
 	  if(SwitchState[1]==GPIO_PIN_SET && SwitchState[0]==GPIO_PIN_RESET)
 	  {
 		  //Change Half Period of LED 1
@@ -125,15 +125,15 @@ int main(void)
 		  {
 			  LED1_HalfPeriod = 500;//1Hz
 		  }
-//		  if(LED1_HalfPeriod == 500)
-//		  {
-//			  LED1_HalfPeriod == 250;//2Hz
-//		  }
-//		  if(LED1_HalfPeriod == 250)
-//		  {
-//			  LED1_HalfPeriod == 125;//3Hz
-//		  }
-		  else
+		  if(LED1_HalfPeriod == 500)
+		  {
+			  LED1_HalfPeriod = 250;//2Hz
+		  }
+		  if(LED1_HalfPeriod == 250)
+		  {
+			  LED1_HalfPeriod = 125;//3Hz
+		  }
+		  if(LED1_HalfPeriod == 125)
 		  {
 			  LED1_HalfPeriod = 1000;
 		  }
@@ -153,15 +153,15 @@ int main(void)
 		  {
 			  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
 		  }
-	  }
-	  if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7)== GPIO_PIN_SET)
-	  {
-		  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);
-	  }
-	  else
-	  {
-		  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);
-	  }
+	   }
+//	  if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7)== GPIO_PIN_SET)
+//	  {
+//		  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);
+//	  }
+//	  else
+//	  {
+//		  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);
+//	  }
 
   }
   /* USER CODE END 3 */
