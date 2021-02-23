@@ -94,8 +94,9 @@ int main(void)
   uint32_t TimeStamp = 0;
   int changeHz = 1000;
   GPIO_PinState SwitchState2[2];
-  int LED2 = 0;
+  int LED2 = 1;
   GPIO_PinState SwitchState3[2];
+  uint32_t Button = 0;
 
   /* USER CODE END 2 */
 
@@ -107,61 +108,60 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 	  //switch press is LOW
-	  SwitchState1[0]= HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);
-	  SwitchState2[0]= HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3);
-	  SwitchState3[0]= HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5);
-	  if(SwitchState2[1]==GPIO_PIN_SET && SwitchState2[0]==GPIO_PIN_RESET)
+	  if(HAL_GetTick() - Button >= 100)
 	  {
-		  if(LED2 = 0)
-		  {
-			  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);
-			  LED2 = 1;
-		  }
-		  else
-		  {
-			  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);
-			  LED2 = 0
-		  }
+		  SwitchState1[0]= HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);
+		  	  SwitchState2[0]= HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3);
+		  	  SwitchState3[0]= HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5);
+		  	  if(SwitchState2[1]==GPIO_PIN_SET && SwitchState2[0]==GPIO_PIN_RESET)
+		  	  {
+		  		  if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7) == GPIO_PIN_SET)
+		  		  {
+		  			  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);
+//		  			  LED2 = 0;
+		  		  }
+		  		  else
+		  		  {
+		  			  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);
+//		  			  LED2 = 1;
+		  		  }
 
-	  }
-	  if(SwitchState1[1]==GPIO_PIN_SET && SwitchState1[0]==GPIO_PIN_RESET)
-	  {
-//		  //Change Half Period of LED 1
-//		  if(LED1_HalfPeriod == 1000)
-//		  {
-//			  LED1_HalfPeriod = 500;//1Hz
-//		  }
-//		  if(LED1_HalfPeriod == 500)
-//		  {
-//			  LED1_HalfPeriod = 250;//2Hz
-//		  }
-//		  if(LED1_HalfPeriod == 250)
-//		  {
-//			  LED1_HalfPeriod = 125;//3Hz
-//		  }
-//		  if(LED1_HalfPeriod == 125)
-//		  {
-//			  LED1_HalfPeriod = 1000;
-//		  }
-		  switch(changeHz)
-		  {
-		  	case 1000:
-		  		LED1_HalfPeriod = 1000;
-		  		changeHz  = changeHz - 500;
-		  		break;
-		  	case 500:
-		  		LED1_HalfPeriod = 500;
-		  		changeHz  = changeHz - 250;
-		  		break;
-		  	case 250:
-		  		LED1_HalfPeriod = 250;
-		  		changeHz  = changeHz - 125;
-		  		break;
-		  	case 125:
-		  		LED1_HalfPeriod = 125;
-		  		changeHz  = changeHz + 875;
-		  		break;
-		  }
+		  	  }
+
+
+
+
+
+		  	  if(SwitchState1[1]==GPIO_PIN_SET && SwitchState1[0]==GPIO_PIN_RESET)
+		  	  {
+		  //		  //Change Half Period of LED 1
+		  		  switch(changeHz)
+		  		  {
+		  		  	case 1000:
+		  		  		LED1_HalfPeriod = 1000;
+		  		  		changeHz  = changeHz - 500;
+		  		  		break;
+		  		  	case 500:
+		  		  		LED1_HalfPeriod = 500;
+		  		  		changeHz  = changeHz - 250;
+		  		  		break;
+		  		  	case 250:
+		  		  		LED1_HalfPeriod = 250;
+		  		  		changeHz  = changeHz - 125;
+		  		  		break;
+		  		  	case 125:
+		  		  		LED1_HalfPeriod = 125;
+		  		  		changeHz  = changeHz + 875;
+		  		  		break;
+		  		  }
+		  	  }
+
+
+		  	if(SwitchState3[1]==GPIO_PIN_SET && SwitchState3[0]==GPIO_PIN_RESET)
+		  	{
+
+		  	}
+
 	  }
 	  SwitchState1[1] = SwitchState1[0];
 	  SwitchState2[1] = SwitchState2[0];
@@ -277,7 +277,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LD2_Pin|GPIO_PIN_7|GPIO_PIN_9, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LD2_Pin|GPIO_PIN_9, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);
@@ -291,8 +291,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : LD2_Pin PA7 PA9 */
-  GPIO_InitStruct.Pin = LD2_Pin|GPIO_PIN_7|GPIO_PIN_9;
+  /*Configure GPIO pins : LD2_Pin PA9 */
+  GPIO_InitStruct.Pin = LD2_Pin|GPIO_PIN_9;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -311,8 +311,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PB3 PB4 PB5 */
-  GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_4|GPIO_PIN_5;
+  /*Configure GPIO pins : PB3 PB5 */
+  GPIO_InitStruct.Pin = GPIO_PIN_3|GPIO_PIN_5;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
