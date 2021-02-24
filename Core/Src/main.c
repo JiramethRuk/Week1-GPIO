@@ -94,10 +94,12 @@ int main(void)
   uint32_t TimeStamp = 0;
   int changeHz = 1000;
   GPIO_PinState SwitchState2[2];
-  int LED2 = 1;
   GPIO_PinState SwitchState3[2];
   uint32_t Button = 0;
-
+//  int Mode3 = 1;
+  uint16_t LEDblink1 = 500;
+  uint16_t LEDblink2 = 1500;
+  uint32_t TimeStamp3 = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -111,19 +113,17 @@ int main(void)
 	  if(HAL_GetTick() - Button >= 100)
 	  {
 		  SwitchState1[0]= HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);
-		  	  SwitchState2[0]= HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3);
-		  	  SwitchState3[0]= HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5);
+		  SwitchState2[0]= HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3);
+		  SwitchState3[0]= HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5);
 		  	  if(SwitchState2[1]==GPIO_PIN_SET && SwitchState2[0]==GPIO_PIN_RESET)
 		  	  {
 		  		  if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7) == GPIO_PIN_SET)
 		  		  {
 		  			  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_RESET);
-//		  			  LED2 = 0;
 		  		  }
 		  		  else
 		  		  {
 		  			  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_7, GPIO_PIN_SET);
-//		  			  LED2 = 1;
 		  		  }
 
 		  	  }
@@ -159,7 +159,18 @@ int main(void)
 
 		  	if(SwitchState3[1]==GPIO_PIN_SET && SwitchState3[0]==GPIO_PIN_RESET)
 		  	{
-
+		  		if(LEDblink1 == 500 && LEDblink2 == 1500)
+		  		{
+		  			LEDblink1 = 1500;
+		  			LEDblink2 = 500;
+//		  			HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) == GPIO_PIN_RESET;
+		  		}
+		  		else
+		  		{
+		  			LEDblink1 = 500;
+		  			LEDblink2 = 1500;
+//		  			HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) == GPIO_PIN_SET;
+		  		}
 		  	}
 
 	  }
@@ -179,6 +190,22 @@ int main(void)
 		  {
 			  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
 		  }
+	   }
+	   if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) == GPIO_PIN_RESET)
+	   {
+		   if(HAL_GetTick()-TimeStamp3 >= LEDblink1)
+		   {
+			   TimeStamp3 = HAL_GetTick();
+			   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);
+		   }
+	   }
+	   if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) == GPIO_PIN_SET)
+	   {
+		   if(HAL_GetTick()-TimeStamp3 >= LEDblink2)
+	   		{
+			   TimeStamp3 = HAL_GetTick();
+			   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
+	   		}
 	   }
   }
   /* USER CODE END 3 */
