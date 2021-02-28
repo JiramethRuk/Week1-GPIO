@@ -112,9 +112,35 @@ int main(void)
 	  //switch press is LOW
 	  if(HAL_GetTick() - Button >= 100)
 	  {
+		  Button = HAL_GetTick();
 		  SwitchState1[0]= HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_10);
 		  SwitchState2[0]= HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_3);
 		  SwitchState3[0]= HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_5);
+
+		  if(SwitchState1[1]==GPIO_PIN_SET && SwitchState1[0]==GPIO_PIN_RESET)
+		  	{
+			  //Change Half Period of LED 1
+		  	  switch(changeHz)
+		  	  	  {
+		  		  	  case 1000:
+		  		  		  LED1_HalfPeriod = 1000;
+		  		  		  changeHz  = changeHz - 500;
+		  		  		  break;
+		  		  	  case 500:
+		  		  		  LED1_HalfPeriod = 500;
+		  		  		  changeHz  = changeHz - 250;
+		  		  		  break;
+		  		  	  case 250:
+		  		  		  LED1_HalfPeriod = 250;
+		  		  		  changeHz  = changeHz - 84;
+		  		  		  break;
+		  		  	  case 166:
+		  		  		  LED1_HalfPeriod = 166;
+		  		  		  changeHz  = changeHz + 834;
+		  		  		  break;
+		  		  	}
+		  	  }
+
 		  	  if(SwitchState2[1]==GPIO_PIN_SET && SwitchState2[0]==GPIO_PIN_RESET)
 		  	  {
 		  		  if(HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_7) == GPIO_PIN_SET)
@@ -130,46 +156,17 @@ int main(void)
 
 
 
-
-
-		  	  if(SwitchState1[1]==GPIO_PIN_SET && SwitchState1[0]==GPIO_PIN_RESET)
-		  	  {
-		  //		  //Change Half Period of LED 1
-		  		  switch(changeHz)
-		  		  {
-		  		  	case 1000:
-		  		  		LED1_HalfPeriod = 1000;
-		  		  		changeHz  = changeHz - 500;
-		  		  		break;
-		  		  	case 500:
-		  		  		LED1_HalfPeriod = 500;
-		  		  		changeHz  = changeHz - 250;
-		  		  		break;
-		  		  	case 250:
-		  		  		LED1_HalfPeriod = 250;
-		  		  		changeHz  = changeHz - 125;
-		  		  		break;
-		  		  	case 125:
-		  		  		LED1_HalfPeriod = 125;
-		  		  		changeHz  = changeHz + 875;
-		  		  		break;
-		  		  }
-		  	  }
-
-
 		  	if(SwitchState3[1]==GPIO_PIN_SET && SwitchState3[0]==GPIO_PIN_RESET)
 		  	{
 		  		if(LEDblink1 == 500 && LEDblink2 == 1500)
 		  		{
 		  			LEDblink1 = 1500;
 		  			LEDblink2 = 500;
-//		  			HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) == GPIO_PIN_RESET;
 		  		}
 		  		else
 		  		{
 		  			LEDblink1 = 500;
 		  			LEDblink2 = 1500;
-//		  			HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_6) == GPIO_PIN_SET;
 		  		}
 		  	}
 
